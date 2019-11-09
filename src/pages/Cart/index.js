@@ -1,13 +1,47 @@
-import React from 'react';
-import {Text, StyleSheet} from 'react-native';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
-// import { Container } from './styles';
-const styles = StyleSheet.create({
-  titulo: {
-    color: 'red',
-  },
-});
+import {
+  Container,
+  Product,
+  ProductImage,
+  ProductTitle,
+  ProductContainer,
+  ProductInfo,
+  ProductPrice,
+} from './styles';
+import {FlatList} from 'react-native-gesture-handler';
 
-export default function Cart() {
-  return <Text style={styles.titulo}>Hello World</Text>;
+class Cart extends Component {
+  loadCartItens(item) {
+    return (
+      <Product>
+        <ProductImage source={{uri: item.image}} />
+        <ProductInfo>
+          <ProductTitle>{item.title}</ProductTitle>
+          <ProductPrice>{item.price}</ProductPrice>
+        </ProductInfo>
+      </Product>
+    );
+  }
+
+  render() {
+    const {cart} = this.props;
+
+    return (
+      <Container>
+        <ProductContainer>
+          <FlatList
+            data={cart}
+            keyExtractor={product => String(product.id)}
+            renderItem={({item}) => this.loadCartItens(item)}
+          />
+        </ProductContainer>
+      </Container>
+    );
+  }
 }
+
+export default connect(state => ({
+  cart: state.cart,
+}))(Cart);

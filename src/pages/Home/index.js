@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Text} from 'react-native';
@@ -15,7 +16,7 @@ import {
   BackgroundIcon,
 } from './styles';
 
-export default class Home extends Component {
+class Home extends Component {
   state = {
     products: [],
   };
@@ -32,13 +33,22 @@ export default class Home extends Component {
     });
   }
 
+  addProductToCart = products => {
+    const {dispatch} = this.props; //Serve basicamente para disparar uma action ao redux
+
+    dispatch({
+      type: 'ADD_TO_CART',
+      products,
+    });
+  };
+
   renderProducts(item) {
     return (
       <Product>
         <ProductImage source={{uri: item.image}} />
         <ProductTitle>{item.title}</ProductTitle>
         <ProductPrice>{item.price}</ProductPrice>
-        <AddButton>
+        <AddButton onPress={() => this.addProductToCart(item)}>
           <BackgroundIcon>
             <Icon name="add-shopping-cart" size={26} color="#FFF" />
             <Text style={{color: '#FFF'}}>1</Text>
@@ -63,3 +73,5 @@ export default class Home extends Component {
     );
   }
 }
+
+export default connect()(Home);
