@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {FlatList} from 'react-native-gesture-handler';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 
 import * as CartActions from '../../store/modules/cart/actions';
+import { formatBRL } from '../../util/format';
 
 import api from '../../services/api';
 import {
@@ -35,23 +36,23 @@ class Home extends Component {
     });
   }
 
-  addProductToCart = products => {
-    const {dispatch} = this.props; //Serve basicamente para disparar uma action ao redux
+  addProductToCart = id => {
+    const { dispatch } = this.props; //Serve basicamente para disparar uma action ao redux
 
-    dispatch(CartActions.addToCart(products));
+    dispatch(CartActions.addToCartRequest(id));
   };
 
   renderProducts(item) {
-    const {amount} = this.props;
+    const { amount } = this.props;
     return (
       <Product>
-        <ProductImage source={{uri: item.image}} />
+        <ProductImage source={{ uri: item.image }} />
         <ProductTitle>{item.title}</ProductTitle>
-        <ProductPrice>{item.price}</ProductPrice>
-        <AddButton onPress={() => this.addProductToCart(item)}>
+        <ProductPrice>{formatBRL(item.price)}</ProductPrice>
+        <AddButton onPress={() => this.addProductToCart(item.id)}>
           <BackgroundIcon>
             <Icon name="add-shopping-cart" size={26} color="#FFF" />
-            <Text style={{color: '#FFF'}}>{amount[item.id] || 0}</Text>
+            <Text style={{ color: '#FFF' }}>{amount[item.id] || 0}</Text>
           </BackgroundIcon>
           <AddButtonText>ADICIONAR</AddButtonText>
         </AddButton>
@@ -60,7 +61,7 @@ class Home extends Component {
   }
 
   render() {
-    const {products} = this.state;
+    const { products } = this.state;
 
     return (
       <Container>
@@ -68,7 +69,7 @@ class Home extends Component {
           horizontal={true}
           data={products}
           keyExtractor={product => String(product.id)}
-          renderItem={({item}) => this.renderProducts(item)}
+          renderItem={({ item }) => this.renderProducts(item)}
         />
       </Container>
     );
