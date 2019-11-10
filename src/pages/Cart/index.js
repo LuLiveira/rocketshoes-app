@@ -94,7 +94,7 @@ class Cart extends Component {
     }
 
     return (
-      <ScrollView>
+      <ScrollView style={{ backgroundColor: '#191920' }}>
         <Container>
           <ProductContainer>
             <FlatList
