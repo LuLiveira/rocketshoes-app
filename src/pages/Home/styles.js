@@ -2,11 +2,13 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
   background: #191920;
+  flex: 1;
 `;
 
 export const Product = styled.View`
   background: #fff;
   width: 200px;
+  height: 350px;
   margin: 10px;
 `;
 

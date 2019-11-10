@@ -15,6 +15,7 @@ export const Product = styled.View`
   flex-direction: row;
   background: #fff;
   margin: 10px;
+  border-radius: 4px;
 `;
 
 export const ProductImage = styled.Image`
@@ -24,8 +25,49 @@ export const ProductImage = styled.Image`
 
 export const ProductInfo = styled.View`
   justify-content: center;
+  width: 200px;
 `;
 
 export const ProductTitle = styled.Text``;
 
 export const ProductPrice = styled.Text``;
+
+export const RemoveButton = styled.TouchableOpacity`
+  justify-content: center;
+`;
+
+export const ProductActions = styled.View`
+  flex-direction: row;
+  background: #eee;
+  align-items: center;
+  margin: 10px;
+  padding: 0 0 0 5px;
+  border-radius: 4px;
+`;
+
+export const Input = styled.TextInput`
+  background: #fff;
+  width: 60px;
+  margin: 10px;
+  max-height: 35px;
+  border-radius: 4px;
+`;
+
+export const TotalPrice = styled.Text`
+  margin-left: 150px;
+`;
+
+export const Total = styled.View`
+  align-items: center;
+  justify-content: center;
+`;
+
+export const TotalLabel = styled.Text`
+  color: #666;
+  font-size: 16px;
+`;
+
+export const TotalValue = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+`;
