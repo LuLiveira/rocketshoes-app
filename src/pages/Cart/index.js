@@ -29,7 +29,7 @@ import {
   DecrementItemButton,
   IncrementItemButton,
 } from './styles';
-import { FlatList } from 'react-native-gesture-handler';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
 class Cart extends Component {
   removeFromCart(id) {
@@ -94,24 +94,26 @@ class Cart extends Component {
     }
 
     return (
-      <Container>
-        <ProductContainer>
-          <FlatList
-            data={cart}
-            keyExtractor={product => String(product.id)}
-            renderItem={({ item }) => this.loadCartItens(item)}
-          />
-          <Total>
-            <TotalLabel>Total</TotalLabel>
-            <TotalValue>{formatBRL(total)}</TotalValue>
-          </Total>
-          <ContentButton>
-            <FinishButton>
-              <FinishText>FINALIZAR PEDIDO</FinishText>
-            </FinishButton>
-          </ContentButton>
-        </ProductContainer>
-      </Container>
+      <ScrollView>
+        <Container>
+          <ProductContainer>
+            <FlatList
+              data={cart}
+              keyExtractor={product => String(product.id)}
+              renderItem={({ item }) => this.loadCartItens(item)}
+            />
+            <Total>
+              <TotalLabel>Total</TotalLabel>
+              <TotalValue>{formatBRL(total)}</TotalValue>
+            </Total>
+            <ContentButton>
+              <FinishButton>
+                <FinishText>FINALIZAR PEDIDO</FinishText>
+              </FinishButton>
+            </ContentButton>
+          </ProductContainer>
+        </Container>
+      </ScrollView>
     );
   }
 }
