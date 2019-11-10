@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Text} from 'react-native';
+import { Text } from 'react-native';
 
-import {formatBRL} from '../../util/format';
+import { formatBRL } from '../../util/format';
 import * as CartActions from '../../store/modules/cart/actions';
 
 import {
@@ -29,32 +29,32 @@ import {
   DecrementItemButton,
   IncrementItemButton,
 } from './styles';
-import {FlatList} from 'react-native-gesture-handler';
+import { FlatList } from 'react-native-gesture-handler';
 
 class Cart extends Component {
   removeFromCart(id) {
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
 
     dispatch(CartActions.removeFromCart(id));
   }
 
-  decrementItem(id) {
-    const {dispatch} = this.props;
+  increment(item) {
+    const { dispatch } = this.props;
 
-    dispatch(CartActions.decrementItem(id));
+    dispatch(CartActions.updateAmountRequest(item.id, item.amount + 1));
   }
 
-  incrementItem(id) {
-    const {dispatch} = this.props;
+  decrement(item) {
+    const { dispatch } = this.props;
 
-    dispatch(CartActions.incrementItem(id));
+    dispatch(CartActions.updateAmountRequest(item.id, item.amount - 1));
   }
 
   loadCartItens(item) {
     return (
       <>
         <Product>
-          <ProductImage source={{uri: item.image}} />
+          <ProductImage source={{ uri: item.image }} />
           <ProductInfo>
             <ProductTitle>{item.title}</ProductTitle>
             <ProductPrice>{item.price}</ProductPrice>
@@ -64,13 +64,13 @@ class Cart extends Component {
           </RemoveButton>
         </Product>
         <ProductActions>
-          <DecrementItemButton onPress={() => this.decrementItem(item.id)}>
+          <DecrementItemButton onPress={() => this.decrement(item)}>
             <Icon name="remove-circle-outline" size={26} color="#7159c1" />
           </DecrementItemButton>
 
           <Input editable={false} value={String(item.amount)} />
 
-          <IncrementItemButton onPress={() => this.incrementItem(item.id)}>
+          <IncrementItemButton onPress={() => this.increment(item)}>
             <Icon name="add-circle-outline" size={26} color="#7159c1" />
           </IncrementItemButton>
           <TotalPrice>{item.subtotal}</TotalPrice>
@@ -80,7 +80,7 @@ class Cart extends Component {
   }
 
   render() {
-    const {cart, total} = this.props;
+    const { cart, total } = this.props;
 
     if (cart.length === 0) {
       return (
@@ -99,11 +99,11 @@ class Cart extends Component {
           <FlatList
             data={cart}
             keyExtractor={product => String(product.id)}
-            renderItem={({item}) => this.loadCartItens(item)}
+            renderItem={({ item }) => this.loadCartItens(item)}
           />
           <Total>
             <TotalLabel>Total</TotalLabel>
-            <TotalValue>{total}</TotalValue>
+            <TotalValue>{formatBRL(total)}</TotalValue>
           </Total>
           <ContentButton>
             <FinishButton>
@@ -121,8 +121,8 @@ const mapStateToProps = state => ({
     ...product,
     subtotal: formatBRL(product.price * product.amount),
   })),
-  total: state.cart.reduce((total, product) => {
-    return formatBRL(total + product.price * product.amount);
+  total: state.cart.reduce((sum, product) => {
+    return sum + product.price * product.amount;
   }, 0),
 });
 
