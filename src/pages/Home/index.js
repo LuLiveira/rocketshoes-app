@@ -42,6 +42,7 @@ class Home extends Component {
   };
 
   renderProducts(item) {
+    const {amount} = this.props;
     return (
       <Product>
         <ProductImage source={{uri: item.image}} />
@@ -50,7 +51,7 @@ class Home extends Component {
         <AddButton onPress={() => this.addProductToCart(item)}>
           <BackgroundIcon>
             <Icon name="add-shopping-cart" size={26} color="#FFF" />
-            <Text style={{color: '#FFF'}}>1</Text>
+            <Text style={{color: '#FFF'}}>{amount[item.id] || 0}</Text>
           </BackgroundIcon>
           <AddButtonText>ADICIONAR</AddButtonText>
         </AddButton>
@@ -60,6 +61,7 @@ class Home extends Component {
 
   render() {
     const {products} = this.state;
+
     return (
       <Container>
         <FlatList
@@ -73,4 +75,12 @@ class Home extends Component {
   }
 }
 
-export default connect()(Home);
+const mapStateToProps = state => ({
+  amount: state.cart.reduce((amount, product) => {
+    amount[product.id] = product.amount;
+
+    return amount;
+  }, {}),
+});
+
+export default connect(mapStateToProps)(Home);

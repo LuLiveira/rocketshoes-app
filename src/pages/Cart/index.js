@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Text} from 'react-native';
 
-import {format} from '../../util/format';
+import {formatBRL} from '../../util/format';
 import * as CartActions from '../../store/modules/cart/actions';
 
 import {
@@ -99,10 +99,10 @@ class Cart extends Component {
 const mapStateToProps = state => ({
   cart: state.cart.map(product => ({
     ...product,
-    subtotal: format(product.price * product.amount),
+    subtotal: formatBRL(product.price * product.amount),
   })),
   total: state.cart.reduce((total, product) => {
-    return format(total + product.price * product.amount);
+    return formatBRL(total + product.price * product.amount);
   }, 0),
 });
 
