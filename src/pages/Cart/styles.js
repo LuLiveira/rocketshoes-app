@@ -28,9 +28,14 @@ export const ProductInfo = styled.View`
   width: 200px;
 `;
 
-export const ProductTitle = styled.Text``;
+export const ProductTitle = styled.Text`
+  font-size: 14px;
+`;
 
-export const ProductPrice = styled.Text``;
+export const ProductPrice = styled.Text`
+  font-size: 16px;
+  font-weight: bold;
+`;
 
 export const RemoveButton = styled.TouchableOpacity`
   justify-content: center;
@@ -70,4 +75,36 @@ export const TotalLabel = styled.Text`
 export const TotalValue = styled.Text`
   font-size: 24px;
   font-weight: bold;
+`;
+
+export const FinishButton = styled.TouchableOpacity`
+  font-size: 24px;
+  font-weight: bold;
+  background: #7159c1;
+  align-items: center;
+  margin: 10px;
+  width: 350px;
+  border-radius: 4px;
+`;
+
+export const FinishText = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+`;
+
+export const ContentButton = styled.View`
+  align-items: center;
+`;
+
+export const EmptyCart = styled.View`
+  background: #fff;
+  align-items: center;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 4px;
+`;
+
+export const EmptyText = styled.Text`
+  font-size: 26px;
 `;

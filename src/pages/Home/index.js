@@ -4,6 +4,8 @@ import {FlatList} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Text} from 'react-native';
 
+import * as CartActions from '../../store/modules/cart/actions';
+
 import api from '../../services/api';
 import {
   Product,
@@ -36,10 +38,7 @@ class Home extends Component {
   addProductToCart = products => {
     const {dispatch} = this.props; //Serve basicamente para disparar uma action ao redux
 
-    dispatch({
-      type: 'ADD_TO_CART',
-      products,
-    });
+    dispatch(CartActions.addToCart(products));
   };
 
   renderProducts(item) {

@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {Text} from 'react-native';
+
+import numeral from 'numeral';
+import * as CartActions from '../../store/modules/cart/actions';
 
 import {
   Container,
@@ -17,10 +21,21 @@ import {
   Total,
   TotalLabel,
   TotalValue,
+  FinishButton,
+  FinishText,
+  ContentButton,
+  EmptyCart,
+  EmptyText,
 } from './styles';
 import {FlatList} from 'react-native-gesture-handler';
 
 class Cart extends Component {
+  removeFromCart(id) {
+    const {dispatch} = this.props;
+
+    dispatch(CartActions.removeFromCart(id));
+  }
+
   loadCartItens(item) {
     return (
       <>
@@ -30,22 +45,33 @@ class Cart extends Component {
             <ProductTitle>{item.title}</ProductTitle>
             <ProductPrice>{item.price}</ProductPrice>
           </ProductInfo>
-          <RemoveButton>
+          <RemoveButton onPress={() => this.removeFromCart(item.id)}>
             <Icon name="delete-forever" size={36} color="#7159c1" />
           </RemoveButton>
         </Product>
         <ProductActions>
           <Icon name="remove-circle-outline" size={26} color="#7159c1" />
-          <Input readonly={true} />
+          <Input editable={false} value={String(item.amount)} />
           <Icon name="add-circle-outline" size={26} color="#7159c1" />
-          <TotalPrice>11111</TotalPrice>
+          <TotalPrice>{item.subtotal}</TotalPrice>
         </ProductActions>
       </>
     );
   }
 
   render() {
-    const {cart} = this.props;
+    const {cart, total} = this.props;
+
+    if (cart.length === 0) {
+      return (
+        <Container>
+          <EmptyCart>
+            <Icon name="remove-shopping-cart" size={100} color="#999" />
+            <EmptyText>Seu carrinho está vazio.</EmptyText>
+          </EmptyCart>
+        </Container>
+      );
+    }
 
     return (
       <Container>
@@ -57,14 +83,27 @@ class Cart extends Component {
           />
           <Total>
             <TotalLabel>Total</TotalLabel>
-            <TotalValue>1616161</TotalValue>
+            <TotalValue>{total}</TotalValue>
           </Total>
+          <ContentButton>
+            <FinishButton>
+              <FinishText>FINALIZAR PEDIDO</FinishText>
+            </FinishButton>
+          </ContentButton>
         </ProductContainer>
       </Container>
     );
   }
 }
 
-export default connect(state => ({
-  cart: state.cart,
-}))(Cart);
+const mapStateToProps = state => ({
+  cart: state.cart.map(product => ({
+    ...product,
+    subtotal: numeral(product.price * product.amount).format('$ 0,0.00'),
+  })),
+  total: state.cart.reduce((total, product) => {
+    return numeral(total + product.price * product.amount).format('$ 0,0.00');
+  }, 0),
+});
+
+export default connect(mapStateToProps)(Cart);

@@ -28,4 +28,9 @@ export const Icon = styled.Image.attrs({
 
 export const Quantity = styled.Text`
   color: #fff;
+  background: #7159c1;
+  height: 20px;
+  border-radius: 15px;
+  width: 20px;
+  padding-left: 6px;
 `;
