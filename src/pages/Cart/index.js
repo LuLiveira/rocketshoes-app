@@ -26,6 +26,8 @@ import {
   ContentButton,
   EmptyCart,
   EmptyText,
+  DecrementItemButton,
+  IncrementItemButton,
 } from './styles';
 import {FlatList} from 'react-native-gesture-handler';
 
@@ -34,6 +36,18 @@ class Cart extends Component {
     const {dispatch} = this.props;
 
     dispatch(CartActions.removeFromCart(id));
+  }
+
+  decrementItem(id) {
+    const {dispatch} = this.props;
+
+    dispatch(CartActions.decrementItem(id));
+  }
+
+  incrementItem(id) {
+    const {dispatch} = this.props;
+
+    dispatch(CartActions.incrementItem(id));
   }
 
   loadCartItens(item) {
@@ -50,9 +64,15 @@ class Cart extends Component {
           </RemoveButton>
         </Product>
         <ProductActions>
-          <Icon name="remove-circle-outline" size={26} color="#7159c1" />
+          <DecrementItemButton onPress={() => this.decrementItem(item.id)}>
+            <Icon name="remove-circle-outline" size={26} color="#7159c1" />
+          </DecrementItemButton>
+
           <Input editable={false} value={String(item.amount)} />
-          <Icon name="add-circle-outline" size={26} color="#7159c1" />
+
+          <IncrementItemButton onPress={() => this.incrementItem(item.id)}>
+            <Icon name="add-circle-outline" size={26} color="#7159c1" />
+          </IncrementItemButton>
           <TotalPrice>{item.subtotal}</TotalPrice>
         </ProductActions>
       </>

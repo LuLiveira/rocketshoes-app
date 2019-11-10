@@ -56,10 +56,11 @@ export const Input = styled.TextInput`
   margin: 10px;
   max-height: 35px;
   border-radius: 4px;
+  padding-left: 10px;
 `;
 
 export const TotalPrice = styled.Text`
-  margin-left: 150px;
+  margin-left: 140px;
 `;
 
 export const Total = styled.View`
@@ -108,3 +109,7 @@ export const EmptyCart = styled.View`
 export const EmptyText = styled.Text`
   font-size: 26px;
 `;
+
+export const IncrementItemButton = styled.TouchableOpacity``;
+
+export const DecrementItemButton = styled.TouchableOpacity``;

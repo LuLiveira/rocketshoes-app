@@ -24,6 +24,25 @@ export default function cart(state = [], action) {
           draft.splice(productIndex, 1);
         }
       });
+
+    case '@cart/DECREMENT':
+      return produce(state, draft => {
+        const product = draft.find(p => p.id === action.id);
+
+        product.amount -= 1;
+
+        if (product.amount === 0) {
+          const productIndex = draft.findIndex(p => p.id === action.id);
+          draft.splice(productIndex, 1);
+        }
+      });
+
+    case '@cart/INCREMENT':
+      return produce(state, draft => {
+        console.tron.log('aqui');
+        const product = draft.find(p => p.id === action.id);
+        product.amount += 1;
+      });
     default:
       return state;
   }
