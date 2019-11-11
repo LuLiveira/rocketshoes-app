@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Text } from 'react-native';
@@ -19,37 +19,39 @@ import {
   BackgroundIcon,
 } from './styles';
 
-class Home extends Component {
-  state = {
-    products: [],
-  };
+export default function Home() {
 
-  componentDidMount() {
-    this.getProducts();
-  }
+  const [products, setProduct] = useState([]);
+  const amount = useSelector(state =>
+    state.cart.reduce((sumAmount, product) => {
+      sumAmount[product.id] = product.amount;
 
-  async getProducts() {
-    const response = await api.get('/products');
+      return sumAmount;
+    }, {})
+  )
+  const dispatch = useDispatch();
 
-    this.setState({
-      products: response.data,
-    });
-  }
+  useEffect(() => {
+    async function getProducts() {
+      const response = await api.get('/products');
 
-  addProductToCart = id => {
-    const { dispatch } = this.props; //Serve basicamente para disparar uma action ao redux
+      setProduct(response.data);
+    }
+    getProducts();
+  }, []);
 
+
+  function addProductToCart(id){
     dispatch(CartActions.addToCartRequest(id));
   };
 
-  renderProducts(item) {
-    const { amount } = this.props;
+  function renderProducts(item) {
     return (
       <Product>
         <ProductImage source={{ uri: item.image }} />
         <ProductTitle>{item.title}</ProductTitle>
         <ProductPrice>{formatBRL(item.price)}</ProductPrice>
-        <AddButton onPress={() => this.addProductToCart(item.id)}>
+        <AddButton onPress={() => addProductToCart(item.id)}>
           <BackgroundIcon>
             <Icon name="add-shopping-cart" size={26} color="#FFF" />
             <Text style={{ color: '#FFF' }}>{amount[item.id] || 0}</Text>
@@ -60,28 +62,14 @@ class Home extends Component {
     );
   }
 
-  render() {
-    const { products } = this.state;
-
-    return (
-      <Container>
-        <FlatList
-          horizontal={true}
-          data={products}
-          keyExtractor={product => String(product.id)}
-          renderItem={({ item }) => this.renderProducts(item)}
-        />
-      </Container>
-    );
-  }
+  return (
+    <Container>
+      <FlatList
+        horizontal={true}
+        data={products}
+        keyExtractor={product => String(product.id)}
+        renderItem={({ item }) => renderProducts(item)}
+      />
+    </Container>
+  );
 }
-
-const mapStateToProps = state => ({
-  amount: state.cart.reduce((amount, product) => {
-    amount[product.id] = product.amount;
-
-    return amount;
-  }, {}),
-});
-
-export default connect(mapStateToProps)(Home);
